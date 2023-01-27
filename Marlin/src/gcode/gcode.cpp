@@ -71,6 +71,11 @@ GcodeSuite gcode;
 
 #include "../MarlinCore.h" // for idle, kill
 
+#if ENABLED(DATOR_EXTENSION_BOARD)
+  #include <Wire.h>
+  #include "../feature/3DatorExt.h"  
+#endif
+
 // Inactivity shutdown
 millis_t GcodeSuite::previous_move_ms = 0,
          GcodeSuite::max_inactive_time = 0;
@@ -695,6 +700,16 @@ void GcodeSuite::process_parsed_command(const bool no_ok/*=false*/) {
       #if HAS_COLOR_LEDS
         case 150: M150(); break;                                  // M150: Set Status LED Color
       #endif
+	  
+	  #if ENABLED(DATOR_EXTENSION_BOARD)
+		case 153: // M153
+		{
+			byte prog = 1;
+			if (parser.seen('S')) prog = parser.value_byte();
+			SendDemo(prog);
+		}
+		break;
+	  #endif
 
       #if ENABLED(MIXING_EXTRUDER)
         case 163: M163(); break;                                  // M163: Set a component weight for mixing extruder

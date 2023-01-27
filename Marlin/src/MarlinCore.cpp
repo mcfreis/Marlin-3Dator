@@ -252,6 +252,11 @@
   #include "tests/marlin_tests.h"
 #endif
 
+#if ENABLED(DATOR_EXTENSION_BOARD)
+  #include <Wire.h>
+  #include "feature/3DatorExt.h"  
+#endif
+
 PGMSTR(M112_KILL_STR, "M112 Shutdown");
 
 MarlinState marlin_state = MF_INITIALIZING;
@@ -1290,6 +1295,13 @@ void setup() {
 
   // Some HAL need precise delay adjustment
   calibrate_delay_loop();
+  
+  #if ENABLED(DATOR_EXTENSION_BOARD)
+	Wire.begin();
+	SetBrightness(old_brightness);
+	SendColors(255, 255, 255, 3, 0);
+	SendRearFanPWM(255);
+  #endif
 
   // Init buzzer pin(s)
   #if HAS_BEEPER

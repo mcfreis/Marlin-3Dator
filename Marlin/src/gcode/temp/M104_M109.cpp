@@ -49,6 +49,11 @@
   #include "../../module/tool_change.h"
 #endif
 
+#if ENABLED(DATOR_EXTENSION_BOARD)
+  #include <Wire.h>
+  #include "../../feature/3DatorExt.h"  
+#endif
+
 /**
  * M104: Set Hotend Temperature target and return immediately
  * M109: Set Hotend Temperature target and wait
@@ -74,6 +79,12 @@
  *  (used by printingIsActive, etc.) and turning off heaters will stop the timer.
  */
 void GcodeSuite::M104_M109(const bool isM109) {
+	
+  #if ENABLED(DATOR_EXTENSION_BOARD)
+    if (isM109) {
+      SendColors(255, 20, 0, 8, 2);
+	}
+  #endif
 
   if (DEBUGGING(DRYRUN)) return;
 

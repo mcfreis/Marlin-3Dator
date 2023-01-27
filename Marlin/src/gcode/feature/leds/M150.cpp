@@ -27,6 +27,11 @@
 #include "../../gcode.h"
 #include "../../../feature/leds/leds.h"
 
+#if ENABLED(DATOR_EXTENSION_BOARD)
+  #include <Wire.h>
+  #include "../../../feature/3DatorExt.h"  
+#endif
+
 /**
  * M150: Set Status LED Color - Use R-U-B-W for R-G-B-W
  *       and Brightness       - Use P (for NEOPIXEL only)
@@ -92,10 +97,22 @@ void GcodeSuite::M150() {
       case 1: leds2.set_color(color); return;
     }
   #endif
-
+  
+  #if ENABLED(DATOR_EXTENSION_BOARD)
+  {
+	const uint8_t red = parser.seen('R') ? (parser.has_value() ? parser.value_byte() : 0) : 0;
+    const uint8_t grn = parser.seen('U') ? (parser.has_value() ? parser.value_byte() : 0) : 0;
+    const uint8_t blu = parser.seen('B') ? (parser.has_value() ? parser.value_byte() : 0) : 0;
+    const uint8_t prog = parser.seen('P') ? (parser.has_value() ? parser.value_byte() : 3) : 3;
+    const uint8_t loops = parser.seen('C') ? (parser.has_value() ? parser.value_byte() : 0) : 0;
+	
+    SendColors(red, grn, blu, prog, loops);
+  }
+  #else
   // If 'S' is not specified use both
   leds.set_color(color);
   TERN_(NEOPIXEL2_SEPARATE, leds2.set_color(color));
+  #endif
 }
 
 #endif // HAS_COLOR_LEDS

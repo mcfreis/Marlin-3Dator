@@ -110,6 +110,11 @@
   #include "../feature/spindle_laser.h"
 #endif
 
+#if ENABLED(DATOR_EXTENSION_BOARD)
+  #include <Wire.h>
+  #include "../feature/3DatorExt.h"  
+#endif
+
 // Delay for delivery of first block to the stepper ISR, if the queue contains 2 or
 // fewer movements. The delay is measured in milliseconds, and must be less than 250ms
 #define BLOCK_DELAY_FOR_1ST_MOVE 100
@@ -1282,7 +1287,9 @@ void Planner::recalculate(TERN_(HINTS_SAFE_EXIT_SPEED, const_float_t safe_exit_s
 
   void Planner::sync_fan_speeds(uint8_t (&fan_speed)[FAN_COUNT]) {
 
-    #if ENABLED(FAN_SOFT_PWM)
+	#if ENABLED(DATOR_EXTENSION_BOARD)
+		#define _FAN_SET(F) SendFanPWM(CALC_FAN_SPEED(fan_speed[F]));
+    #elif ENABLED(FAN_SOFT_PWM)
       #define _FAN_SET(F) thermalManager.soft_pwm_amount_fan[F] = CALC_FAN_SPEED(fan_speed[F]);
     #else
       #define _FAN_SET(F) hal.set_pwm_duty(pin_t(FAN##F##_PIN), CALC_FAN_SPEED(fan_speed[F]));

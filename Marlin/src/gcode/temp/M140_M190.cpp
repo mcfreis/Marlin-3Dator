@@ -34,6 +34,11 @@
 #include "../../module/temperature.h"
 #include "../../lcd/marlinui.h"
 
+#if ENABLED(DATOR_EXTENSION_BOARD)
+  #include <Wire.h>
+  #include "../../feature/3DatorExt.h"  
+#endif
+
 /**
  * M140 - Set Bed Temperature target and return immediately
  * M190 - Set Bed Temperature target and wait
@@ -56,6 +61,12 @@
  *  (used by printingIsActive, etc.) and turning off heaters will stop the timer.
  */
 void GcodeSuite::M140_M190(const bool isM190) {
+	
+  #if ENABLED(DATOR_EXTENSION_BOARD)
+    if (isM190) {
+      SendColors(255, 20, 0, 8, 2);
+	}
+  #endif
 
   if (DEBUGGING(DRYRUN)) return;
 
