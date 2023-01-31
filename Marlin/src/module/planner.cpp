@@ -110,7 +110,7 @@
   #include "../feature/spindle_laser.h"
 #endif
 
-#if ENABLED(DATOR_EXTENSION_BOARD)
+#if ENABLED(DATOR_EXTENSION_PART_FAN)
   #include <Wire.h>
   #include "../feature/3DatorExt.h"  
 #endif
@@ -1287,8 +1287,8 @@ void Planner::recalculate(TERN_(HINTS_SAFE_EXIT_SPEED, const_float_t safe_exit_s
 
   void Planner::sync_fan_speeds(uint8_t (&fan_speed)[FAN_COUNT]) {
 
-	#if ENABLED(DATOR_EXTENSION_BOARD)
-		#define _FAN_SET(F) SendFanPWM(CALC_FAN_SPEED(fan_speed[F]));
+	  #if ENABLED(DATOR_EXTENSION_PART_FAN)
+		  #define _FAN_SET(F) SendFanPWM(CALC_FAN_SPEED(fan_speed[F]));
     #elif ENABLED(FAN_SOFT_PWM)
       #define _FAN_SET(F) thermalManager.soft_pwm_amount_fan[F] = CALC_FAN_SPEED(fan_speed[F]);
     #else

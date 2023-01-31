@@ -667,10 +667,10 @@
     #define DEFAULT_Ki_LIST {   1.08,   1.08 }
     #define DEFAULT_Kd_LIST { 114.00, 114.00 }
   #else
-    // 3Dator
-    #define DEFAULT_Kp  19.91
-    #define DEFAULT_Ki   1.23
-    #define DEFAULT_Kd  80.33
+    // 3Dator // BF
+    #define DEFAULT_Kp  19.20
+    #define DEFAULT_Ki   1.45
+    #define DEFAULT_Kd  63.69
   #endif
 #endif
 
@@ -735,7 +735,7 @@
  * the issues involved, don't use bed PID until someone else verifies that your hardware works.
  * @section bed temp
  */
-//#define PIDTEMPBED
+#define PIDTEMPBED
 
 //#define BED_LIMIT_SWITCHING
 
@@ -753,9 +753,10 @@
 
   // 120V 250W silicone heater into 4mm borosilicate (MendelMax 1.5+)
   // from FOPDT model - kp=.39 Tp=405 Tdead=66, Tc set to 79.2, aggressive factor of .15 (vs .1, 1, 10)
-  #define DEFAULT_bedKp 10.00
-  #define DEFAULT_bedKi .023
-  #define DEFAULT_bedKd 305.4
+  // 3Dator // BF
+  #define DEFAULT_bedKp 153.38
+  #define DEFAULT_bedKi 22.83
+  #define DEFAULT_bedKd 686.90
 
   // FIND YOUR OWN: "M303 E-1 C8 S90" to run autotune on the bed at 90 degreesC for 8 cycles.
 #endif // PIDTEMPBED
@@ -812,7 +813,7 @@
                                   // is more than PID_FUNCTIONAL_RANGE then the PID will be shut off and the heater will be set to min/max.
 
   //#define PID_EDIT_MENU         // Add PID editing to the "Advanced Settings" menu. (~700 bytes of flash)
-  #define PID_AUTOTUNE_MENU     // Add PID auto-tuning to the "Advanced Settings" menu. (~250 bytes of flash)
+  //#define PID_AUTOTUNE_MENU     // Add PID auto-tuning to the "Advanced Settings" menu. (~250 bytes of flash)
 #endif
 
 // @section safety
@@ -1169,7 +1170,7 @@
  * Override with M92
  *                                      X, Y, Z [, I [, J [, K...]]], E0 [, E1[, E2...]]
  */
-#define DEFAULT_AXIS_STEPS_PER_UNIT   { 55.3, 55.3, 400.0, 418.5 }
+#define DEFAULT_AXIS_STEPS_PER_UNIT   { 56.52, 56.52, 396.84, 406.23 }  // BF
 
 /**
  * Default Max Feed Rate (linear=mm/s, rotational=°/s)
@@ -1484,7 +1485,7 @@
  *     |    [-]    |
  *     O-- FRONT --+
  */
-#define NOZZLE_TO_PROBE_OFFSET { 30, 0, 0 }
+#define NOZZLE_TO_PROBE_OFFSET { 30, 0, -0.3 }  // BF
 
 // Most probes should stay away from the edges of the bed, but
 // with NOZZLE_AS_PROBE this can be negative for a wider probing area.
@@ -1695,8 +1696,8 @@
 // @section geometry
 
 // The size of the printable area
-#define X_BED_SIZE 170
-#define Y_BED_SIZE 170
+#define X_BED_SIZE 170  // BF
+#define Y_BED_SIZE 160  // BF
 
 // Travel limits (linear=mm, rotational=°) after homing, corresponding to endstop positions.
 #define X_MIN_POS 0
@@ -2183,7 +2184,7 @@
 #define EEPROM_BOOT_SILENT    // Keep M503 quiet and only give errors during first load
 #if ENABLED(EEPROM_SETTINGS)
   //#define EEPROM_AUTO_INIT  // Init EEPROM automatically on any errors.
-  #define EEPROM_INIT_NOW   // Init EEPROM on first boot after a new build.
+  //#define EEPROM_INIT_NOW   // Init EEPROM on first boot after a new build.
 #endif
 
 // @section host
@@ -3212,12 +3213,12 @@
 
 // Set number of user-controlled fans. Disable to use all board-defined fans.
 // :[1,2,3,4,5,6,7,8]
-//#define NUM_M106_FANS 1
+#define NUM_M106_FANS 1
 
 // Use software PWM to drive the fan, as for the heaters. This uses a very low frequency
 // which is not as annoying as with the hardware PWM. On the other hand, if this frequency
 // is too low, you should also increment SOFT_PWM_SCALE.
-//#define FAN_SOFT_PWM
+#define FAN_SOFT_PWM
 
 // Incrementing this by 1 will double the software PWM frequency,
 // affecting heaters, and the fan if FAN_SOFT_PWM is enabled.
@@ -3363,4 +3364,9 @@
 //#define SERVO_DETACH_GCODE
 
 // 3Dator Extension board via i2c with Fan and LED control 
-#define DATOR_EXTENSION_BOARD
+#define DATOR_EXTENSION_LEDS
+//#define DATOR_EXTENSION_PART_FAN
+//#define DATOR_EXTENSION_HOTEND_FAN
+#if ANY(DATOR_EXTENSION_LEDS, DATOR_EXTENSION_PART_FAN, DATOR_EXTENSION_HOTEND_FAN)
+  #define DATOR_EXTENSION_BOARD
+#endif

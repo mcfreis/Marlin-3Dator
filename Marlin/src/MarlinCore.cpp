@@ -1298,9 +1298,13 @@ void setup() {
   
   #if ENABLED(DATOR_EXTENSION_BOARD)
 	Wire.begin();
-	SetBrightness(old_brightness);
-	SendColors(255, 255, 255, 3, 0);
-	SendRearFanPWM(255);
+  #if ENABLED(DATOR_EXTENSION_LEDS)
+	  SetBrightness(old_brightness);
+	  SendColors(255, 255, 255, PRG_MOVE_DOWN, 0);
+  #endif
+  #if ENABLED(DATOR_EXTENSION_HOTEND_FAN)
+	  SendRearFanPWM(255);
+  #endif
   #endif
 
   // Init buzzer pin(s)

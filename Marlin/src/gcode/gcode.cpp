@@ -71,7 +71,7 @@ GcodeSuite gcode;
 
 #include "../MarlinCore.h" // for idle, kill
 
-#if ENABLED(DATOR_EXTENSION_BOARD)
+#if ENABLED(DATOR_EXTENSION_LEDS)
   #include <Wire.h>
   #include "../feature/3DatorExt.h"  
 #endif
@@ -701,7 +701,7 @@ void GcodeSuite::process_parsed_command(const bool no_ok/*=false*/) {
         case 150: M150(); break;                                  // M150: Set Status LED Color
       #endif
 	  
-	  #if ENABLED(DATOR_EXTENSION_BOARD)
+	  #if ENABLED(DATOR_EXTENSION_LEDS)
 		case 153: // M153
 		{
 			byte prog = 1;

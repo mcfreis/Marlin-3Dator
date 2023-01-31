@@ -34,7 +34,7 @@
 #include "../../module/temperature.h"
 #include "../../lcd/marlinui.h"
 
-#if ENABLED(DATOR_EXTENSION_BOARD)
+#if ENABLED(DATOR_EXTENSION_LEDS)
   #include <Wire.h>
   #include "../../feature/3DatorExt.h"  
 #endif
@@ -62,9 +62,9 @@
  */
 void GcodeSuite::M140_M190(const bool isM190) {
 	
-  #if ENABLED(DATOR_EXTENSION_BOARD)
+  #if ENABLED(DATOR_EXTENSION_LEDS)
     if (isM190) {
-      SendColors(255, 20, 0, 8, 2);
+      SendColors(255, 20, 0, PRG_SNAKE, 3);
 	}
   #endif
 
