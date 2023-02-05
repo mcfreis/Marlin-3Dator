@@ -754,6 +754,20 @@ inline void manage_inactivity(const bool no_stepper_sleep=false) {
       WRITE(FET_SAFETY_PIN, FET_SAFETY_INVERTED);
     }
   #endif
+
+  #if ENABLED(DATOR_EXTENSION_LEDS)
+    if (ui.lcd_clicked || ui.encoderPosition > 0 || has_blocks || printJobOngoing()) {
+      last_activity_time = ms/1000;
+    }
+    if ((ms/1000 - last_activity_time) > DATOR_EXTENSION_INACTIVE_TIME && set_inactive == false) {
+      set_inactive = true;
+      save_brightness = SetBrightness(50);
+    }
+    if(set_inactive == true && (ms/1000 - last_activity_time) <= DATOR_EXTENSION_INACTIVE_TIME) {
+      set_inactive = false;
+      SetBrightness(save_brightness);
+    }
+  #endif
 }
 
 /**
@@ -1299,7 +1313,7 @@ void setup() {
   #if ENABLED(DATOR_EXTENSION_BOARD)
 	Wire.begin();
   #if ENABLED(DATOR_EXTENSION_LEDS)
-	  SetBrightness(old_brightness);
+	  SetBrightness(save_brightness);
 	  SendColors(255, 255, 255, PRG_MOVE_DOWN, 0);
   #endif
   #if ENABLED(DATOR_EXTENSION_HOTEND_FAN)

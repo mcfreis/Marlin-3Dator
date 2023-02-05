@@ -69,9 +69,9 @@
 	#define DEMO_MODE 2
 
 
-extern byte led_colors[3];
-extern byte old_brightness;
-extern byte fanSpeed;
+extern long last_activity_time;
+extern byte save_brightness;
+extern bool set_inactive;
 
 extern void SendColors(byte red, byte grn, byte blu, byte prog, byte loops);
 extern byte SetBrightness(byte brightness);

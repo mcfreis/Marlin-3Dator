@@ -13,6 +13,10 @@ byte fanSpeed = 0;
 byte led_colors[3] = {255,255,255};
 byte old_brightness = 255;
 
+long last_activity_time = millis()/1000;
+byte save_brightness = 255;
+bool set_inactive = false;
+
 void SendColorsInstant(byte red, byte grn, byte blu) {
   //send information over i2c
   Wire.beginTransmission(4);
